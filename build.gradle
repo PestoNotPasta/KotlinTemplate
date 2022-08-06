@@ -1,0 +1,64 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'net.minecrell.plugin-yml.bukkit' version '0.5.2'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+}
+
+group = 'io.github.pestonotpasta'
+version = '1.0.0'
+description = 'Some description'
+String pluginVersion = version
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of('17'))
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module.downloadJavadoc = true
+    module.downloadSources = true
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+        useIR = true
+    }
+}
+
+shadowJar {
+    minimize()
+    archiveClassifier.set('')
+    archiveVersion.set(pluginVersion)
+}
+
+bukkit {
+    main = 'io.github.pestonotpasta.template.KotlinTemplate'
+    apiVersion = '1.18'
+    load = 'STARTUP'
+    version = pluginVersion
+    authors = ['Pesto']
+}
